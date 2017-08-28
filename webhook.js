@@ -63,10 +63,23 @@ app.post('/webhook', (req, res) => {
 
 app.post('/ai', (req, res) => {
   console.log("AI");
+
+  if (req.body.result.action === 'weather') {
+    console.log("weather");
+  }
+  if (req.body.result.action === 'recommend') {
+    console.log("recommend");
+    //sendTextMessage(res, "hello");
+  }
 });
 
-function sendTextMessage(event){
-  
+function sendTextMessage(res, text){
+  let msg = text;
+  return res.json({
+    speech: msg,
+    displayText: msg,
+    source: 'recommend'
+  });
 }
 
 function sendMessage(event) {
