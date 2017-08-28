@@ -61,6 +61,14 @@ app.post('/webhook', (req, res) => {
   }
 });
 
+app.post('/ai', (req, res) => {
+  console.log("AI");
+});
+
+function sendTextMessage(event){
+  
+}
+
 function sendMessage(event) {
   console.log("Sending Message");
   let sender = event.sender.id;
