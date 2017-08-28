@@ -2,7 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const request = require('request');
 const app = express();
-const PAGE_ACCESS_TOKEN = "EAAaYGGf5AUUBABDtjZCJZChGMwG6EeWRc1Xk7A0NkWqKLiE0lfp4Q84DROZCE9uM9eyIZBVmmioDqmdag7m4NOaFK1Lra3C9IIZCYFUDihLspWdro3en6WEjrpJUhVTdPZBOmNTqZAJjPQGCCU7HiIjW8EvweSzythnQBDEt2kgUwZDZD"
+const apiaiApp = require('apiai')('16315278f9854468a6154ed7d96b50dc');
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -65,19 +66,34 @@ function sendMessage(event) {
   let sender = event.sender.id;
   let text = event.message.text;
 
-  request({
-    url: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: {access_token: 'EAAaYGGf5AUUBABDtjZCJZChGMwG6EeWRc1Xk7A0NkWqKLiE0lfp4Q84DROZCE9uM9eyIZBVmmioDqmdag7m4NOaFK1Lra3C9IIZCYFUDihLspWdro3en6WEjrpJUhVTdPZBOmNTqZAJjPQGCCU7HiIjW8EvweSzythnQBDEt2kgUwZDZD'},
-    method: 'POST',
-    json: {
-      recipient: {id: sender},
-      message: {text: text}
-    }
-  }, function (error, response) {
-    if (error) {
-        console.log('Error sending message: ', error);
-    } else if (response.body.error) {
-        console.log('Error: ', response.body.error);
-    }
+  let apiai = apiaiApp.textRequest(text, {
+    sessionId: 'talk'
   });
+
+  apiai.on('response', (response) => {
+    let aiText = response.result.fulfillment.speech;
+
+    request({
+      url: 'https://graph.facebook.com/v2.6/me/messages',
+      qs: {access_token: 'EAAaYGGf5AUUBABDtjZCJZChGMwG6EeWRc1Xk7A0NkWqKLiE0lfp4Q84DROZCE9uM9eyIZBVmmioDqmdag7m4NOaFK1Lra3C9IIZCYFUDihLspWdro3en6WEjrpJUhVTdPZBOmNTqZAJjPQGCCU7HiIjW8EvweSzythnQBDEt2kgUwZDZD'},
+      method: 'POST',
+      json: {
+        recipient: {id: sender},
+        message: {text: aiText}
+      }
+    }, function (error, response) {
+      if (error) {
+          console.log('Error sending message: ', error);
+      } else if (response.body.error) {
+          console.log('Error: ', response.body.error);
+      }
+    });
+  });
+
+  apiai.on('error', (error) => {
+    console.log(error);
+  });
+
+  apiai.end();
+
 }
