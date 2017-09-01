@@ -15,7 +15,7 @@ const server = app.listen(process.env.PORT || 5000, () => {
 app.get('/', (req, res) => {
   res.send("Deployed!");
   //this is a test
-  if (req.query['hub.mode'] && req.query['hub.verify_token'] === 'pally') {
+  if (req.query['hub.mode'] && req.query['hub.verify_token'] === process.env.VERIFICATION_TOKEN) {
     res.status(200).send(req.query['hub.challenge']);
   } else {
     res.status(403).end();
@@ -25,7 +25,7 @@ app.get('/', (req, res) => {
 /* For Facebook Validation */
 app.get('/webhook', (req, res) => {
   console.log("get webhook");
-  if (req.query['hub.mode'] && req.query['hub.verify_token'] === 'pally') {
+  if (req.query['hub.mode'] && req.query['hub.verify_token'] === process.env.VERIFICATION_TOKEN) {
     res.status(200).send(req.query['hub.challenge']);
   } else {
     res.status(403).end();
