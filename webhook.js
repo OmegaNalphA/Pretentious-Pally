@@ -13,6 +13,7 @@ const server = app.listen(process.env.PORT || 5000, () => {
 });
 
 app.get('/', (req, res) => {
+  res.send("Deployed!");
   if (req.query['hub.mode'] && req.query['hub.verify_token'] === 'pally') {
     res.status(200).send(req.query['hub.challenge']);
   } else {
