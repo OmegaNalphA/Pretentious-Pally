@@ -28,7 +28,7 @@ var generateRandomString = function(length) {
 var stateKey = 'spotify_auth_state';
 
 app.get('/', (req, res) => {
-  console.log("Deployed!");
+  console.log("Deployed!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
   res.send("Deployed!");
   //this is a test
   if (req.query['hub.mode'] && req.query['hub.verify_token'] === process.env.VERIFICATION_TOKEN) {
