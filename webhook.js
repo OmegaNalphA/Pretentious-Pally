@@ -4,12 +4,16 @@ const request = require('request');
 const app = express();
 const apiaiApp = require('apiai')('16315278f9854468a6154ed7d96b50dc');
 
+var querystring = require('querystring');
+var cookieParser = require('cookie-parser');
+
 var client_id = '6ee98b04355d4b93931acaa8e2f62bc1'; 
 var client_secret = 'd852a1726cd44c5393e819f76658f3f7';
 var redirect_uri = 'https://pretentious-pally.herokuapp.com/callback';
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(cookieParser());
 
 const server = app.listen(process.env.PORT || 5000, () => {
   console.log('Express server listening on port %d in %s mode', server.address().port, app.settings.env);
