@@ -43,7 +43,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/test', (req, res) => {
-  window.document.location.href = '/html/test.html';
+  res.sendFile(path.join(__dirname + '/html/test.html'));
 })
 
 /* For Facebook Validation */
