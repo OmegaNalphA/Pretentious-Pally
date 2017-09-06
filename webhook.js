@@ -42,6 +42,10 @@ app.get('/', (req, res) => {
   }
 });
 
+app.get('/test', (req, res) => {
+  window.document.location.href = '/html/test.html';
+})
+
 /* For Facebook Validation */
 app.get('/webhook', (req, res) => {
   console.log("get webhook");
