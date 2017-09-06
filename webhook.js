@@ -96,7 +96,7 @@ app.post('/ai', (req, res) => {
   var state = generateRandomString(16);
   res.cookie(stateKey, state);
 
-  conole.log("we are here");
+  console.log("we are here");
   // your application requests authorization
   var scope = 'user-read-private user-read-email';
   res.redirect('https://accounts.spotify.com/authorize?' +
