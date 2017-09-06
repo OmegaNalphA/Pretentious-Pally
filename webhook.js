@@ -44,7 +44,7 @@ app.get('/', (req, res) => {
 
 app.get('/test', (req, res) => {
   console.log(__dirname);
-  res.sendFile(path.join('index.html'));
+  res.sendFile('./index.html');
 })
 
 /* For Facebook Validation */
