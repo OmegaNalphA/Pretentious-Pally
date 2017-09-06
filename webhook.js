@@ -4,6 +4,9 @@ const request = require('request');
 const app = express();
 const apiaiApp = require('apiai')('16315278f9854468a6154ed7d96b50dc');
 
+var client_id = '6ee98b04355d4b93931acaa8e2f62bc1'; 
+var client_secret = 'd852a1726cd44c5393e819f76658f3f7';
+var redirect_uri = 'https://pretentious-pally.herokuapp.com/callback';
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -11,6 +14,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const server = app.listen(process.env.PORT || 5000, () => {
   console.log('Express server listening on port %d in %s mode', server.address().port, app.settings.env);
 });
+
+var generateRandomString = function(length) {
+  var text = '';
+  var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+  for (var i = 0; i < length; i++) {
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  return text;
+};
+
+var stateKey = 'spotify_auth_state';
 
 app.get('/', (req, res) => {
   res.send("Deployed!");
@@ -63,16 +78,35 @@ app.post('/webhook', (req, res) => {
   }
 });
 
-app.post('/ai', (req, res) => {
-  console.log("AI");
+app.get('/callback', (req, res) =>{
+  sendTextMessage(res, "You succeeded in authenticating!");
+});
 
-  if (req.body.result.action === 'weather') {
-    console.log("weather");
-  }
-  if (req.body.result.action === 'recommend') {
-    console.log("recommend");
-    //sendTextMessage(res, "hello");
-  }
+app.post('/ai', (req, res) => {
+  // console.log("AI");
+
+  // if (req.body.result.action === 'weather') {
+  //   console.log("weather");
+  // }
+  // if (req.body.result.action === 'recommend') {
+  //   console.log("recommend");
+  //   //sendTextMessage(res, "hello");
+  // }
+
+  var state = generateRandomString(16);
+  res.cookie(stateKey, state);
+
+  // your application requests authorization
+  var scope = 'user-read-private user-read-email';
+  res.redirect('https://accounts.spotify.com/authorize?' +
+    querystring.stringify({
+      response_type: 'code',
+      client_id: client_id,
+      scope: scope,
+      redirect_uri: redirect_uri,
+      state: state
+    }));
+
 });
 
 function sendTextMessage(res, text){
