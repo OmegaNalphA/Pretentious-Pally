@@ -193,20 +193,27 @@ app.post('/ai', (req, res) => {
   //   //sendTextMessage(res, "hello");
   // }
 
-  var state = generateRandomString(16);
-  res.cookie(stateKey, state);
+  // var state = generateRandomString(16);
+  // res.cookie(stateKey, state);
 
-  console.log("we are here");
-  // your application requests authorization
-  var scope = 'user-read-private user-read-email';
-  res.redirect('https://accounts.spotify.com/authorize?' +
-    querystring.stringify({
-      response_type: 'code',
-      client_id: client_id,
-      scope: scope,
-      redirect_uri: redirect_uri,
-      state: state
-    }));
+  // console.log("we are here");
+  // // your application requests authorization
+  // var scope = 'user-read-private user-read-email';
+  // res.redirect('https://accounts.spotify.com/authorize?' +
+  //   querystring.stringify({
+  //     response_type: 'code',
+  //     client_id: client_id,
+  //     scope: scope,
+  //     redirect_uri: redirect_uri,
+  //     state: state
+  //   }));
+  console.log("out here");
+  spotify.searchTracks('Love')
+  .then(function(data) {
+    console.log('Search by "Love"', data.body);
+  }, function(err) {
+    console.error(err);
+  });
 
 });
 
